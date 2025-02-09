@@ -4,6 +4,8 @@ A basic containerised version of [_ka9q-radio_](https://github.com/ka9q/ka9q-rad
 
 [_avahi-daemon_](https://avahi.org/) is required on the host running the container (included by default with Raspberry Pi OS).
 
+Make sure to run `touch /opt/ka9q-radio/wisdomf /opt/ka9q-radio/wisdom` (paths from below examples) before starting the container for the first time, otherwise Docker may create an empty directory in their place if they are missing.
+
 ## Example configurations
 
 ### `radiod.conf` for a RTL-SDR
@@ -56,6 +58,8 @@ docker build -t ka9q-radio <dockerfile-path>
 ### Run `fftwf-wisdom`
 
 ```shell
+touch /opt/ka9q-radio/wisdomf /opt/ka9q-radio/wisdom
+
 docker run --name ka9q-radio --rm -it --network=host --device=/dev/bus/usb \
 -v /opt/ka9q-radio/radiod.conf:/etc/radio/radiod.conf:ro \
 -v /opt/ka9q-radio/wisdomf:/etc/fftw/wisdomf \
