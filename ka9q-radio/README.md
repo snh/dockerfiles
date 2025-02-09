@@ -31,8 +31,7 @@ calibrate = -1e-6
 ```yaml
 services:
   ka9q-radio:
-    build:
-      context: dockerfiles/ka9q-radio
+    build: https://github.com/snh/dockerfiles.git#main:ka9q-radio
     container_name: ka9q-radio
     devices:
       - "/dev/bus/usb:/dev/bus/usb"
