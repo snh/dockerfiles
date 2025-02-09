@@ -1,0 +1,51 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e6a7c07..0bee5bd 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -8,7 +8,7 @@ LIST (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/Modules)
+ PROJECT( CellSearch )
+ ENABLE_TESTING()
+
+-SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -ggdb -Wall")
++SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++03 -ggdb -Wall")
+ SET (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Werror -ggdb -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC")
+
+ # Set default build type
+diff --git a/cmake/Modules/FindFFTW.cmake b/cmake/Modules/FindFFTW.cmake
+index 98f49d8..a40e5e8 100644
+--- a/cmake/Modules/FindFFTW.cmake
++++ b/cmake/Modules/FindFFTW.cmake
+@@ -24,6 +24,7 @@ FIND_LIBRARY(FFTW_LIBRARY
+   /usr/pkgs64/lib
+   /usr/lib64
+   /usr/lib
++  /usr/lib/aarch64-linux-gnu
+   /usr/local/lib
+   NO_DEFAULT_PATH
+ )
+diff --git a/cmake/Modules/FindITPP.cmake b/cmake/Modules/FindITPP.cmake
+index 4f3b417..4cb0362 100644
+--- a/cmake/Modules/FindITPP.cmake
++++ b/cmake/Modules/FindITPP.cmake
+@@ -23,6 +23,8 @@ FIND_LIBRARY(ITPP_LIBRARY_NORMAL
+   /usr/pkgs64/lib
+   /usr/lib64
+   /usr/lib
++  /usr/lib/aarch64-linux-gnu
++  /usr/lib/x86_64-linux-gnu
+   /usr/local/lib
+   NO_DEFAULT_PATH
+ )
+diff --git a/cmake/Modules/FindRTLSDR.cmake b/cmake/Modules/FindRTLSDR.cmake
+index 169a4ae..bebcf62 100644
+--- a/cmake/Modules/FindRTLSDR.cmake
++++ b/cmake/Modules/FindRTLSDR.cmake
+@@ -23,6 +23,8 @@ FIND_LIBRARY(RTLSDR_LIBRARY
+   /usr/pkgs64/lib
+   /usr/lib64
+   /usr/lib
++  /usr/lib/aarch64-linux-gnu
++  /usr/lib/x86_64-linux-gnu
+   /usr/local/lib
+   NO_DEFAULT_PATH
+ )
