@@ -84,3 +84,20 @@ Follow the great ka9q-radio notes by [projecthorus/radiosonde_auto_rx](https://g
 ```shell
 docker run --rm -it -v /opt/auto_rx/station.cfg:/opt/auto_rx/station.cfg:ro --network=host -v /var/run/avahi-daemon/socket:/var/run/avahi-daemon/socket ghcr.io/projecthorus/radiosonde_auto_rx:latest
 ```
+
+```yaml
+services:
+  radiosonde_auto_rx:
+    container_name: radiosonde_auto_rx
+    image: ghcr.io/projecthorus/radiosonde_auto_rx:latest
+    network_mode: host
+    ports:
+      - "5000:5000"
+    restart: always
+    volumes:
+      - /opt/auto_rx/station.cfg:/opt/auto_rx/station.cfg:ro
+      - type: bind
+        source: /var/run/avahi-daemon/socket
+        target: /var/run/avahi-daemon/socket
+      - /opt/auto_rx/logs:/opt/auto_rx/log
+```
