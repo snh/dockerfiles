@@ -79,11 +79,8 @@ COPY --from=build \
     /src/aprs \
     /src/aprsfeed \
     /src/cwd \
-    /src/opusd \
     /src/packetd \
     /src/radiod \
-    /src/rdsd \
-    /src/stereod \
     /usr/local/sbin/
 
 # Copy additional binaries from the build stage
@@ -92,16 +89,9 @@ COPY --from=build \
     /src/jt-decoded \
     /src/metadump \
     /src/monitor \
-    /src/opussend \
-    /src/pcmcat \
     /src/pcmrecord \
-    /src/pcmsend \
-    /src/pcmspawn \
     /src/pl \
     /src/powers \
-    /src/setfilt \
-    /src/show-pkt \
-    /src/show-sig \
     /src/tune \
     /src/wd-record \
     /usr/local/bin/
