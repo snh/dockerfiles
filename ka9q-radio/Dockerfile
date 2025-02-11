@@ -4,7 +4,7 @@
 FROM debian:bookworm-slim AS build
 
 # ka9q-radio git ref to use
-ARG REF=main
+ARG REF=refs/heads/main
 
 # Install necessary packages for building the application
 RUN apt-get update && \
@@ -37,7 +37,7 @@ RUN apt-get update && \
     && rm -rf /var/lib/apt/lists/*
 
 # Download the source code into the build container
-ADD https://github.com/ka9q/ka9q-radio/archive/refs/heads/$REF.zip /tmp/ka9q-radio.zip
+ADD https://github.com/ka9q/ka9q-radio/archive/$REF.zip /tmp/ka9q-radio.zip
 RUN unzip /tmp/ka9q-radio.zip -d /tmp && \
   mv /tmp/ka9q-radio-* /src && \
   rm /tmp/ka9q-radio.zip
