@@ -55,7 +55,7 @@ services:
 ### Build the container
 
 ```shell
-docker build -t ka9q-radio <dockerfile-path>
+docker build -t ka9q-radio https://github.com/snh/dockerfiles.git#main:ka9q-radio
 ```
 
 ### Run `fftwf-wisdom`
