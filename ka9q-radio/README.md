@@ -34,6 +34,9 @@ calibrate = -1e-6
 services:
   ka9q-radio:
     build: https://github.com/snh/dockerfiles.git#main:ka9q-radio
+    cap_add:
+      - CAP_NET_ADMIN
+      - CAP_SYS_NICE
     container_name: ka9q-radio
     devices:
       - "/dev/bus/usb:/dev/bus/usb"
@@ -60,11 +63,9 @@ docker build -t ka9q-radio <dockerfile-path>
 ```shell
 touch /opt/ka9q-radio/wisdomf /opt/ka9q-radio/wisdom
 
-docker run --name ka9q-radio --rm -it --network=host --device=/dev/bus/usb \
--v /opt/ka9q-radio/radiod.conf:/etc/radio/radiod.conf:ro \
+docker run --name ka9q-radio --rm -it --network=host \
 -v /opt/ka9q-radio/wisdomf:/etc/fftw/wisdomf \
 -v /opt/ka9q-radio/wisdom:/var/lib/ka9q-radio/wisdom \
--v /var/run/dbus:/var/run/dbus \
 ka9q-radio fftwf-wisdom -v -T 1 -w /var/lib/ka9q-radio/wisdom -o /etc/fftw/wisdomf cof51200
 ```
 
@@ -72,6 +73,7 @@ ka9q-radio fftwf-wisdom -v -T 1 -w /var/lib/ka9q-radio/wisdom -o /etc/fftw/wisdo
 
 ```shell
 docker run --name ka9q-radio --rm -it --network=host --device=/dev/bus/usb \
+--cap-add CAP_NET_ADMIN --cap-add CAP_SYS_NICE \
 -v /opt/ka9q-radio/radiod.conf:/etc/radio/radiod.conf:ro \
 -v /opt/ka9q-radio/wisdomf:/etc/fftw/wisdomf \
 -v /opt/ka9q-radio/wisdom:/var/lib/ka9q-radio/wisdom \
