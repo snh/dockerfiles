@@ -4,8 +4,7 @@
   FROM debian:bookworm-slim AS build
 
   RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install -y \
+    apt-get install -y --no-install-recommends \
     build-essential \
     cmake \
     libblas-dev \
@@ -37,8 +36,7 @@
   FROM debian:bookworm-slim
 
   RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install -y \
+    apt-get install -y --no-install-recommends \
     libboost-chrono1.74.0 \
     libboost-date-time1.74.0 \
     libboost-thread1.74.0 \
