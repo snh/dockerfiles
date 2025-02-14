@@ -22,6 +22,7 @@ RUN apt-get update && \
     libhackrf-dev \
     libiniparser-dev \
     libncurses5-dev \
+    libncursesw5-dev \
     libogg-dev \
     libopus-dev \
     librtlsdr-dev \
@@ -66,6 +67,7 @@ RUN apt-get update && \
     libhackrf0 \
     libiniparser1 \
     libncurses5 \
+    libncursesw5 \
     libogg0 \
     libopus0 \
     libportaudio2 \
