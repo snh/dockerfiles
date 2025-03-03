@@ -98,6 +98,9 @@ COPY --from=build \
     /src/wd-record \
     /usr/local/bin/
 
+# Copy shared libraries from the build stage
+COPY --from=build /src/*.so /usr/local/lib/ka9q-radio/
+
 # Copy shared resources from the build stage
 COPY --from=build /src/share /usr/local/share/ka9q-radio
 
