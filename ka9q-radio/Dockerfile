@@ -23,8 +23,7 @@ RUN apt-get update && \
     libfftw3-dev \
     libhackrf-dev \
     libiniparser-dev \
-    libncurses5-dev \
-    libncursesw5-dev \
+    libncurses-dev \
     libogg-dev \
     libopus-dev \
     libsamplerate0-dev \
@@ -52,13 +51,13 @@ RUN unzip /tmp/rtl-sdr.zip -d /tmp && \
 WORKDIR /src/rtl-sdr/build
 
 # Build the rtl-sdr source code, and install to the build container
-# as well as a staging directory for the install to the later 
+# as well as a staging directory for the install to the later
 # application container
 RUN cmake -Wno-dev .. && \
     make && \
     make install && \
     make DESTDIR=/src/rtl-sdr/install install
-    
+
 # Download the ka9q-radio source code into the build container
 ADD https://github.com/ka9q/ka9q-radio/archive/$KA9Q_RADIO_REF.zip /tmp/ka9q-radio.zip
 RUN unzip /tmp/ka9q-radio.zip -d /tmp && \
@@ -88,8 +87,7 @@ RUN apt-get update && \
     libfftw3-single3 \
     libhackrf0 \
     libiniparser1 \
-    libncurses5 \
-    libncursesw5 \
+    libncursesw6 \
     libogg0 \
     libopus0 \
     libportaudio2 \
