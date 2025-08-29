@@ -20,6 +20,7 @@ data = sonde-pcm.local
 [rtlsdr]
 device = rtlsdr
 serial = 00000031
+samprate = 2048000
 frequency = 401m55
 agc = 1
 calibrate = -1e-6
