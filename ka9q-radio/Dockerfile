@@ -111,6 +111,7 @@ COPY --from=build \
 # Copy additional binaries from the build stage
 COPY --from=build \
     /src/ka9q-radio/control \
+    /src/ka9q-radio/fft-gen \
     /src/ka9q-radio/jt-decoded \
     /src/ka9q-radio/metadump \
     /src/ka9q-radio/monitor \
