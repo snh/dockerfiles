@@ -46,7 +46,7 @@ services:
     volumes:
       - /opt/ka9q-radio/radiod.conf:/etc/radio/radiod.conf:ro
       - /opt/ka9q-radio/wisdomf:/etc/fftw/wisdomf
-      - /opt/ka9q-radio/wisdom:/var/lib/ka9q-radio/wisdom
+      - /opt/ka9q-radio/ka9q-radio:/var/lib/ka9q-radio
       - /var/run/dbus:/var/run/dbus
 ```
 
