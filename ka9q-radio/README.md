@@ -4,8 +4,6 @@ A basic containerised version of [_ka9q-radio_](https://github.com/ka9q/ka9q-rad
 
 [_avahi-daemon_](https://avahi.org/) is required on the host running the container (included by default with Raspberry Pi OS).
 
-Make sure to run `touch /opt/ka9q-radio/wisdomf /opt/ka9q-radio/wisdom` (paths from below examples) before starting the container for the first time, otherwise Docker may create an empty directory in their place if they are missing.
-
 ## Example configurations
 
 ### `radiod.conf` for a RTL-SDR
@@ -22,7 +20,6 @@ data = sonde-pcm.local
 [rtlsdr]
 device = rtlsdr
 serial = 00000031
-samprate = 2048000
 frequency = 401m55
 agc = 1
 calibrate = -1e-6
@@ -45,8 +42,7 @@ services:
     tty: true
     volumes:
       - /opt/ka9q-radio/radiod.conf:/etc/radio/radiod.conf:ro
-      - /opt/ka9q-radio/wisdomf:/etc/fftw/wisdomf
-      - /opt/ka9q-radio/ka9q-radio:/var/lib/ka9q-radio
+      - /opt/ka9q-radio/data:/var/lib/ka9q-radio
       - /var/run/dbus:/var/run/dbus
 ```
 
@@ -58,27 +54,27 @@ services:
 docker build -t ka9q-radio https://github.com/snh/dockerfiles.git#main:ka9q-radio
 ```
 
-### Run `fftwf-wisdom`
-
-```shell
-touch /opt/ka9q-radio/wisdomf /opt/ka9q-radio/wisdom
-
-docker run --name ka9q-radio --rm -it --network=host \
--v /opt/ka9q-radio/wisdomf:/etc/fftw/wisdomf \
--v /opt/ka9q-radio/wisdom:/var/lib/ka9q-radio/wisdom \
-ka9q-radio fftwf-wisdom -v -T 1 -w /var/lib/ka9q-radio/wisdom -o /etc/fftw/wisdomf cof51200
-```
-
 ### Run `radiod` (the default application in the container)
 
 ```shell
 docker run --name ka9q-radio --rm -it --network=host --device=/dev/bus/usb \
 --cap-add CAP_NET_ADMIN --cap-add CAP_SYS_NICE \
 -v /opt/ka9q-radio/radiod.conf:/etc/radio/radiod.conf:ro \
--v /opt/ka9q-radio/wisdomf:/etc/fftw/wisdomf \
--v /opt/ka9q-radio/wisdom:/var/lib/ka9q-radio/wisdom \
+-v /opt/ka9q-radio/data:/var/lib/ka9q-radio \
 -v /var/run/dbus:/var/run/dbus \
 ka9q-radio
+```
+
+### Generate FFT wisdom file
+
+Run this command after running `radiod` at least once, which will populate `/var/lib/ka9q-radio/fft.log` with FFT transforms (one per line), which can then be used to determine which transforms need to be generated.
+
+This command will take a while to run, depending on how many unique FFT transforms are in the log file.
+
+```shell
+docker run --name ka9q-radio --rm -it --network=host \
+-v /opt/ka9q-radio/data:/var/lib/ka9q-radio \
+ka9q-radio /bin/sh -c "cat /var/lib/ka9q-radio/fft.log | sort | uniq | fft-gen -v -v"
 ```
 
 ## Miscellaneous notes
