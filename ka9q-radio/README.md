@@ -20,8 +20,7 @@ data = sonde-pcm.local
 [rtlsdr]
 device = rtlsdr
 serial = 00000031
-samprate = 2048000
-frequency = 401m55
+frequency = 401m1
 agc = 1
 calibrate = -1e-6
 ```
@@ -73,7 +72,7 @@ Run this command after running `radiod` at least once, which will populate `/var
 This command will take a while to run, depending on how many unique FFT transforms are in the log file.
 
 ```shell
-docker run --name ka9q-radio --rm -it --network=host \
+docker run --name ka9q-radio-fft --rm -it --network=host \
 -v /opt/ka9q-radio/data:/var/lib/ka9q-radio \
 ka9q-radio /bin/sh -c "cat /var/lib/ka9q-radio/fft.log | sort | uniq | fft-gen -v -v"
 ```
@@ -103,4 +102,18 @@ services:
         source: /var/run/avahi-daemon/socket
         target: /var/run/avahi-daemon/socket
       - /opt/auto_rx/logs:/opt/auto_rx/log
+```
+
+The earlier `radiod.conf` example uses the following snippets of config in `station.cfg`, which should be adjusted to suit your setup in combination with adjustments to `radiod.conf`.
+
+```ini
+[sdr]
+sdr_type = KA9Q
+sdr_quantity = 4
+sdr_hostname = sonde.local
+sdr_port = 5555
+
+[search_params]
+min_freq = 400.2
+max_freq = 402.0
 ```
