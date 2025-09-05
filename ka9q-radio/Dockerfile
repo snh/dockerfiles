@@ -68,7 +68,7 @@ RUN unzip /tmp/ka9q-radio.zip -d /tmp && \
 WORKDIR /src/ka9q-radio
 
 # Build ka9q-radio using the provided Linux Makefile
-RUN make -f Makefile.linux
+RUN make
 
 # -------------------------
 # The application container
@@ -101,29 +101,29 @@ RUN ldconfig
 
 # Copy the built binaries from the build stage
 COPY --from=build \
-    /src/ka9q-radio/aprs \
-    /src/ka9q-radio/aprsfeed \
-    /src/ka9q-radio/cwd \
-    /src/ka9q-radio/packetd \
-    /src/ka9q-radio/radiod \
+    /src/ka9q-radio/src/aprs \
+    /src/ka9q-radio/src/aprsfeed \
+    /src/ka9q-radio/src/cwd \
+    /src/ka9q-radio/src/packetd \
+    /src/ka9q-radio/src/radiod \
     /usr/local/sbin/
 
 # Copy additional binaries from the build stage
 COPY --from=build \
-    /src/ka9q-radio/control \
-    /src/ka9q-radio/fft-gen \
-    /src/ka9q-radio/jt-decoded \
-    /src/ka9q-radio/metadump \
-    /src/ka9q-radio/monitor \
-    /src/ka9q-radio/pcmrecord \
-    /src/ka9q-radio/pl \
-    /src/ka9q-radio/powers \
-    /src/ka9q-radio/tune \
-    /src/ka9q-radio/wd-record \
+    /src/ka9q-radio/src/control \
+    /src/ka9q-radio/src/fft-gen \
+    /src/ka9q-radio/src/jt-decoded \
+    /src/ka9q-radio/src/metadump \
+    /src/ka9q-radio/src/monitor \
+    /src/ka9q-radio/src/pcmrecord \
+    /src/ka9q-radio/src/pl \
+    /src/ka9q-radio/src/powers \
+    /src/ka9q-radio/src/tune \
+    /src/ka9q-radio/src/wd-record \
     /usr/local/bin/
 
 # Copy shared libraries from the build stage
-COPY --from=build /src/ka9q-radio/*.so /usr/local/lib/ka9q-radio/
+COPY --from=build /src/ka9q-radio/src/*.so /usr/local/lib/ka9q-radio/
 
 # Copy shared resources from the build stage
 COPY --from=build /src/ka9q-radio/share /usr/local/share/ka9q-radio
