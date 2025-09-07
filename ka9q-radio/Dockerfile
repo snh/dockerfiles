@@ -1,7 +1,7 @@
 # -------------------
 # The build container
 # -------------------
-FROM debian:bookworm-slim AS build
+FROM debian:trixie-slim AS build
 
 # git refs to use
 ARG RTL_SDR_REF=refs/tags/v2.0.2
@@ -73,7 +73,7 @@ RUN make
 # -------------------------
 # The application container
 # -------------------------
-FROM debian:bookworm-slim
+FROM debian:trixie-slim
 
 # Install necessary packages for running the application
 RUN apt-get update && \
@@ -86,7 +86,7 @@ RUN apt-get update && \
     libfftw3-bin \
     libfftw3-single3 \
     libhackrf0 \
-    libiniparser1 \
+    libiniparser4 \
     libncursesw6 \
     libogg0 \
     libopus0 \
