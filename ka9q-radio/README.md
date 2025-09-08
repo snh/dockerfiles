@@ -22,7 +22,6 @@ device = rtlsdr
 serial = 00000031
 frequency = 401m1
 agc = 1
-calibrate = -1e-6
 ```
 
 ### Docker Compose
@@ -67,7 +66,7 @@ ka9q-radio
 
 ### Generate FFT wisdom file
 
-Run this command after running `radiod` at least once, which will populate `/var/lib/ka9q-radio/fft.log` with FFT transforms (one per line), which can then be used to determine which transforms need to be generated.
+Run this command after running `radiod` at least once for a radiosonde decode cycle, which will populate `/var/lib/ka9q-radio/fft.log` with FFT transforms (one per line), which can then be used to determine which transforms need to be generated.
 
 This command will take a while to run, depending on how many unique FFT transforms are in the log file.
 
@@ -76,6 +75,8 @@ docker run --name ka9q-radio-fft --rm -it --network=host \
 -v /opt/ka9q-radio/data:/var/lib/ka9q-radio \
 ka9q-radio /bin/sh -c "cat /var/lib/ka9q-radio/fft.log | sort | uniq | fft-gen -v -v"
 ```
+
+You should re-run this command periodically to add any new FFT transforms to the wisdom file. Remembering that `radiod` will need to be restarted to pick up any changes to the wisdom file.
 
 ## Miscellaneous notes
 
@@ -98,10 +99,10 @@ services:
     restart: always
     volumes:
       - /opt/auto_rx/station.cfg:/opt/auto_rx/station.cfg:ro
+      - /opt/auto_rx/logs:/opt/auto_rx/log
       - type: bind
         source: /var/run/avahi-daemon/socket
         target: /var/run/avahi-daemon/socket
-      - /opt/auto_rx/logs:/opt/auto_rx/log
 ```
 
 The earlier `radiod.conf` example uses the following snippets of config in `station.cfg`, which should be adjusted to suit your setup in combination with adjustments to `radiod.conf`.
@@ -111,7 +112,6 @@ The earlier `radiod.conf` example uses the following snippets of config in `stat
 sdr_type = KA9Q
 sdr_quantity = 4
 sdr_hostname = sonde.local
-sdr_port = 5555
 
 [search_params]
 min_freq = 400.2
