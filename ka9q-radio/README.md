@@ -6,7 +6,9 @@ A basic containerised version of [_ka9q-radio_](https://github.com/ka9q/ka9q-rad
 
 ## Example configurations
 
-### `radiod.conf` for a RTL-SDR
+### `radiod.conf`
+
+#### RTL-SDR
 
 ```ini
 [global]
@@ -19,9 +21,25 @@ data = sonde-pcm.local
 
 [rtlsdr]
 device = rtlsdr
-serial = 00000031
-frequency = 401m1
+samprate = 2048000
+frequency = 401m5
 agc = 1
+```
+
+#### Airspy Mini
+
+```ini
+[global]
+hardware = airspy
+mode = fm
+status = sonde.local
+iface = lo
+ttl = 0
+data = sonde-pcm.local
+
+[airspy]
+device = airspy
+frequency = 405m6
 ```
 
 ### Docker Compose
@@ -105,7 +123,7 @@ services:
         target: /var/run/avahi-daemon/socket
 ```
 
-The earlier `radiod.conf` example uses the following snippets of config in `station.cfg`, which should be adjusted to suit your setup in combination with adjustments to `radiod.conf`.
+The earlier `radiod.conf` examples use the following snippets of config in `station.cfg`, which should be adjusted to suit your needs in combination with adjustments to `radiod.conf`.
 
 ```ini
 [sdr]
@@ -114,6 +132,6 @@ sdr_quantity = 4
 sdr_hostname = sonde.local
 
 [search_params]
-min_freq = 400.2
-max_freq = 402.0
+min_freq = 400.5 # 400.05 for Airspy Mini
+max_freq = 402.5 # 403.00 for Airspy Mini
 ```
