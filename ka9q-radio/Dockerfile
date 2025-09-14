@@ -4,7 +4,6 @@
 FROM debian:trixie-slim AS build
 
 # git refs to use
-ARG RTL_SDR_REF=refs/tags/v2.0.2
 ARG KA9Q_RADIO_REF=refs/heads/main
 
 # Install necessary packages for building the application
@@ -26,6 +25,7 @@ RUN apt-get update && \
     libncurses-dev \
     libogg-dev \
     libopus-dev \
+    librtlsdr-dev \
     libsamplerate0-dev \
     libusb-1.0-0-dev \
     libusb-dev \
@@ -39,24 +39,6 @@ RUN apt-get update && \
 
 # Create a directory for source code
 RUN mkdir -p /src
-
-# Download the rtl-sdr source code into the build container
-ADD https://github.com/osmocom/rtl-sdr/archive/$RTL_SDR_REF.zip /tmp/rtl-sdr.zip
-RUN unzip /tmp/rtl-sdr.zip -d /tmp && \
-    mv /tmp/rtl-sdr-* /src/rtl-sdr && \
-    rm /tmp/rtl-sdr.zip && \
-    mkdir -p /src/rtl-sdr/build
-
-# Set the working directory for the rtl-sdr build
-WORKDIR /src/rtl-sdr/build
-
-# Build the rtl-sdr source code, and install to the build container
-# as well as a staging directory for the install to the later
-# application container
-RUN cmake -Wno-dev .. && \
-    make && \
-    make install && \
-    make DESTDIR=/src/rtl-sdr/install install
 
 # Download the ka9q-radio source code into the build container
 ADD https://github.com/ka9q/ka9q-radio/archive/$KA9Q_RADIO_REF.zip /tmp/ka9q-radio.zip
@@ -91,13 +73,10 @@ RUN apt-get update && \
     libogg0 \
     libopus0 \
     libportaudio2 \
+    librtlsdr0 \
     libsamplerate0 \
     tini && \
     rm -rf /var/lib/apt/lists/*
-
-# Copy over the rtl-sdr install from the build stage
-COPY --from=build /src/rtl-sdr/install /
-RUN ldconfig
 
 # Copy the built binaries from the build stage
 COPY --from=build \
