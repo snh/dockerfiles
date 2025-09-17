@@ -5,6 +5,7 @@ FROM debian:trixie-slim AS build
 
 # git refs to use
 ARG KA9Q_RADIO_REF=refs/heads/main
+ARG RFONE_HOST_REF=v1.0.2
 
 # Install necessary packages for building the application
 RUN apt-get update && \
@@ -39,6 +40,21 @@ RUN apt-get update && \
 
 # Create a directory for source code
 RUN mkdir -p /src
+
+# Download the rfone_host source code into the build container
+ADD https://github.com/hydrasdr/rfone_host/archive/$RFONE_HOST_REF.zip /tmp/rfone_host.zip
+RUN unzip /tmp/rfone_host.zip -d /tmp && \
+    mv /tmp/rfone_host-* /src/rfone_host && \
+    rm /tmp/rfone_host.zip && \
+    mkdir -p /src/rfone_host/build
+
+# Set the working directory for the rfone_host build
+WORKDIR /src/rfone_host/build
+
+# Build the rfone_host source code, and install to the build container
+RUN cmake .. && \
+    make && \
+    make install
 
 # Download the ka9q-radio source code into the build container
 ADD https://github.com/ka9q/ka9q-radio/archive/$KA9Q_RADIO_REF.zip /tmp/ka9q-radio.zip
