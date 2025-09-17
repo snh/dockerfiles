@@ -71,6 +71,9 @@ COPY --from=build /src/ka9q-web/html /usr/local/share/ka9q-web
 # Update the shared library cache
 RUN ldconfig
 
+# Update the name resolution configuration
+RUN sed -i 's/hosts:.*/hosts: files mdns4_minimal [NOTFOUND=return] dns mdns4/' /etc/nsswitch.conf
+
 # Use tini as the init system to handle reaping zombie processes and signal forwarding
 ENTRYPOINT ["/usr/bin/tini", "--"]
 
