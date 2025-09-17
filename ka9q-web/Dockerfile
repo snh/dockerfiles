@@ -53,9 +53,9 @@ FROM debian:trixie-slim
 # Install necessary packages for running the application
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    avahi-utils \
     libgcrypt20 \
     libgnutls30t64 \
+    libnss-mdns \
     tini && \
     rm -rf /var/lib/apt/lists/*
 
@@ -70,9 +70,6 @@ COPY --from=build /src/ka9q-web/html /usr/local/share/ka9q-web
 
 # Update the shared library cache
 RUN ldconfig
-
-# Update the name resolution configuration
-RUN sed -i 's/hosts:.*/hosts: files mdns4_minimal [NOTFOUND=return] dns mdns4/' /etc/nsswitch.conf
 
 # Use tini as the init system to handle reaping zombie processes and signal forwarding
 ENTRYPOINT ["/usr/bin/tini", "--"]
