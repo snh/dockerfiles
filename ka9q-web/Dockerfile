@@ -66,7 +66,7 @@ COPY --from=build /src/ka9q-web/ka9q-web /usr/local/sbin/
 COPY --from=build /usr/local/lib/libonion.so /usr/local/lib/
 
 # Copy shared resources from the build stage
-COPY --from=build /src/ka9q-web/html /usr/local/share/ka9q-web
+COPY --from=build /src/ka9q-web/html/ /usr/local/share/ka9q-web/html
 
 # Update the shared library cache
 RUN ldconfig
