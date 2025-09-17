@@ -4,8 +4,8 @@
 FROM debian:trixie-slim AS build
 
 # git refs to use
-ARG KA9Q_RADIO_REF=refs/heads/main
 ARG RFONE_HOST_REF=v1.0.2
+ARG KA9Q_RADIO_REF=refs/heads/main
 
 # Install necessary packages for building the application
 RUN apt-get update && \
@@ -59,8 +59,8 @@ RUN cmake .. && \
 # Download the ka9q-radio source code into the build container
 ADD https://github.com/ka9q/ka9q-radio/archive/$KA9Q_RADIO_REF.zip /tmp/ka9q-radio.zip
 RUN unzip /tmp/ka9q-radio.zip -d /tmp && \
-  mv /tmp/ka9q-radio-* /src/ka9q-radio && \
-  rm /tmp/ka9q-radio.zip
+    mv /tmp/ka9q-radio-* /src/ka9q-radio && \
+    rm /tmp/ka9q-radio.zip
 
 # Set the working directory for the ka9q-radio build
 WORKDIR /src/ka9q-radio
@@ -96,26 +96,26 @@ RUN apt-get update && \
 
 # Copy the built binaries from the build stage
 COPY --from=build \
-    /src/ka9q-radio/src/aprs \
-    /src/ka9q-radio/src/aprsfeed \
-    /src/ka9q-radio/src/cwd \
-    /src/ka9q-radio/src/packetd \
-    /src/ka9q-radio/src/radiod \
-    /usr/local/sbin/
+  /src/ka9q-radio/src/aprs \
+  /src/ka9q-radio/src/aprsfeed \
+  /src/ka9q-radio/src/cwd \
+  /src/ka9q-radio/src/packetd \
+  /src/ka9q-radio/src/radiod \
+  /usr/local/sbin/
 
 # Copy additional binaries from the build stage
 COPY --from=build \
-    /src/ka9q-radio/src/control \
-    /src/ka9q-radio/src/fft-gen \
-    /src/ka9q-radio/src/jt-decoded \
-    /src/ka9q-radio/src/metadump \
-    /src/ka9q-radio/src/monitor \
-    /src/ka9q-radio/src/pcmrecord \
-    /src/ka9q-radio/src/pl \
-    /src/ka9q-radio/src/powers \
-    /src/ka9q-radio/src/tune \
-    /src/ka9q-radio/src/wd-record \
-    /usr/local/bin/
+  /src/ka9q-radio/src/control \
+  /src/ka9q-radio/src/fft-gen \
+  /src/ka9q-radio/src/jt-decoded \
+  /src/ka9q-radio/src/metadump \
+  /src/ka9q-radio/src/monitor \
+  /src/ka9q-radio/src/pcmrecord \
+  /src/ka9q-radio/src/pl \
+  /src/ka9q-radio/src/powers \
+  /src/ka9q-radio/src/tune \
+  /src/ka9q-radio/src/wd-record \
+  /usr/local/bin/
 
 # Copy shared libraries from the build stage
 COPY --from=build /src/ka9q-radio/src/*.so /usr/local/lib/ka9q-radio/
