@@ -53,7 +53,6 @@ FROM debian:trixie-slim
 # Install necessary packages for running the application
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    avahi-utils \
     libgcrypt20 \
     libgnutls30t64 \
     libnss-mdns \
