@@ -4,7 +4,7 @@
 FROM debian:trixie-slim AS build
 
 # git refs to use
-ARG RFONE_HOST_REF=v1.0.2
+ARG RFONE_HOST_REF=v1.0.3
 ARG KA9Q_RADIO_REF=refs/heads/main
 
 # Install necessary packages for building the application
