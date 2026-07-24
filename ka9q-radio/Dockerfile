@@ -4,7 +4,7 @@
 FROM debian:trixie-slim AS build
 
 # git refs to use
-ARG RFONE_HOST_REF=v1.0.3
+ARG HYDRASDR_HOST_REF=v1.1.1
 ARG KA9Q_RADIO_REF=refs/heads/main
 
 # Install necessary packages for building the application
@@ -36,17 +36,17 @@ RUN apt-get update && \
 # Create a directory for source code
 RUN mkdir -p /src
 
-# Download the rfone_host source code into the build container
-ADD https://github.com/hydrasdr/rfone_host/archive/$RFONE_HOST_REF.zip /tmp/rfone_host.zip
-RUN unzip /tmp/rfone_host.zip -d /tmp && \
-    mv /tmp/rfone_host-* /src/rfone_host && \
-    rm /tmp/rfone_host.zip && \
-    mkdir -p /src/rfone_host/build
+# Download the hydrasdr-host source code into the build container
+ADD https://github.com/hydrasdr/hydrasdr-host/archive/$HYDRASDR_HOST_REF.zip /tmp/hydrasdr-host.zip
+RUN unzip /tmp/hydrasdr-host.zip -d /tmp && \
+    mv /tmp/hydrasdr-host-* /src/hydrasdr-host && \
+    rm /tmp/hydrasdr-host.zip && \
+    mkdir -p /src/hydrasdr-host/build
 
-# Set the working directory for the rfone_host build
-WORKDIR /src/rfone_host/build
+# Set the working directory for the hydrasdr-host build
+WORKDIR /src/hydrasdr-host/build
 
-# Build the rfone_host source code, and install to the build container
+# Build the hydrasdr-host source code, and install to the build container
 RUN cmake .. && \
     make && \
     make install
@@ -61,6 +61,8 @@ RUN unzip /tmp/ka9q-radio.zip -d /tmp && \
 WORKDIR /src/ka9q-radio
 
 # Build ka9q-radio using the provided Linux Makefile
+ENV ENABLE_BLADERF=0
+ENV ENABLE_FOBOS=0
 RUN make
 
 # -------------------------
@@ -96,17 +98,20 @@ COPY --from=build \
   /src/ka9q-radio/src/cwd \
   /src/ka9q-radio/src/packetd \
   /src/ka9q-radio/src/radiod \
+  /src/ka9q-radio/src/rx888_boot \
   /usr/local/sbin/
 
 # Copy additional binaries from the build stage
 COPY --from=build \
+  /src/ka9q-radio/src/ctcss \
   /src/ka9q-radio/src/control \
   /src/ka9q-radio/src/fft-gen \
   /src/ka9q-radio/src/jt-decoded \
   /src/ka9q-radio/src/metadump \
   /src/ka9q-radio/src/monitor \
+  /src/ka9q-radio/src/opussend \
   /src/ka9q-radio/src/pcmrecord \
-  /src/ka9q-radio/src/pl \
+  /src/ka9q-radio/src/pcmsend \
   /src/ka9q-radio/src/powers \
   /src/ka9q-radio/src/tune \
   /src/ka9q-radio/src/wd-record \
